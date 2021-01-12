@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>index.html</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+	$(function(){
+		$.ajax({
+			url:'getEmpList',
+			type:'get',
+			dataType:'json',
+			success:function(result){
+				//console.log(result);
+				let data=result;
+				let firstNames = $(data).map(function(i,o){
+					return o.firstName;
+				}).get();
+				console.log(firstNames);
+				let grepNames = $.grep(firstNames,function(o, i){
+					return o.length >5;
+				},true); //default는 false / true는 반대의 값을 보여줌.
+				console.log(grepNames);
+			},
+			error:function(result){
+				//console.log(result);
+			}
+		});
+	})
+</script>
+</head>
+<body>
+	
+</body>
+</html>
