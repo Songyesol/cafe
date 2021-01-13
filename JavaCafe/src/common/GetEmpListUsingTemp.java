@@ -10,25 +10,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/getEmpList")
-public class GetEmpListJsonServ extends HttpServlet {
+@WebServlet("/getEmpListTemp")
+public class GetEmpListUsingTemp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
-    public GetEmpListJsonServ() {
+    public GetEmpListUsingTemp() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		EmpDAO dao = new EmpDAO();
 		List<EmployeeVO> list = dao.getEmpList();
-		PrintWriter out = response.getWriter();
 		
 		String json = "[";
 		int cnt =1;
 		for(EmployeeVO emp:list) {
 			json += "{";
 			json += "\"empId\":\""+ emp.getEmployeeId() + "\"";
-			json += ",\"firstName\":\""+ emp.getFirstName() + "\"";
+			json += ",\"firstname\":\""+ emp.getFirstName() + "\"";
 			json += ",\"lastName\":\""+ emp.getLastName() + "\"";
 			json += ",\"email\":\""+ emp.getEmail() + "\"";
 			json += ",\"hireDate\":\""+emp.getHireDate() + "\"";
@@ -39,8 +38,7 @@ public class GetEmpListJsonServ extends HttpServlet {
 			}
 		}
 		json += "]";
-		
-		out.print(json);
+		response.getWriter().append(json);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

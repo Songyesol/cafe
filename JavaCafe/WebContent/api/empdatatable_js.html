@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>api/datatable_js.html</title>
+<link href = "https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" rel = "stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<script>
+ 	$.ajax({
+ 		url : '../getEmpListTemp',
+ 		dataType: 'json',
+ 		success : tempCallbackFunc,
+ 		error : function(reject){
+ 			console.log(reject);
+ 		}
+ 	});
+	
+	function tempCallbackFunc(result){
+		console.log(result);
+ 		let data = result;
+		let outAry = [];
+		for (val of data){
+		let inAry = [];
+		console.log(val);
+			 for(field in val) {+
+				console.log(field, val[field]);
+				inAry.push(val[field]);
+			}
+			outAry.push(inAry); 
+		}
+		//console.log(outAry);
+		
+ 		let dataset = outAry;
+		 $(document).ready(function() {
+	    	$('#example').DataTable( {
+	        	data: dataset,
+	        	columns: [
+	            { title: "Employee Id" },
+	            { title: "First Name" },
+	            { title: "Last Name" },
+	            { title: "Email" },
+	            { title: "Hire Date" },
+	            { title: "Salary" }
+	        ]
+	    } );
+	} );  
+	}
+</script>
+</head>
+<body>
+	<table id="example" class="display" width="100%"></table>
+</body>
+</html>

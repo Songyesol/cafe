@@ -1,7 +1,6 @@
 package common;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,39 +9,41 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/getEmpList")
-public class GetEmpListJsonServ extends HttpServlet {
+
+@WebServlet("/getSchedule")
+public class getScheduleSurvlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
-    public GetEmpListJsonServ() {
+    public getScheduleSurvlet() {
         super();
     }
-
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/html charset=utf-8");
+		
 		EmpDAO dao = new EmpDAO();
-		List<EmployeeVO> list = dao.getEmpList();
-		PrintWriter out = response.getWriter();
+		List<ScheduleVO> list = dao.getScheduleList();
 		
 		String json = "[";
 		int cnt =1;
-		for(EmployeeVO emp:list) {
+		for(ScheduleVO vo:list) {
 			json += "{";
-			json += "\"empId\":\""+ emp.getEmployeeId() + "\"";
-			json += ",\"firstName\":\""+ emp.getFirstName() + "\"";
-			json += ",\"lastName\":\""+ emp.getLastName() + "\"";
-			json += ",\"email\":\""+ emp.getEmail() + "\"";
-			json += ",\"hireDate\":\""+emp.getHireDate() + "\"";
-			json += ",\"salary\":\""+ emp.getSalary() + "\"";
+			json += "\"title\":\""+vo.getTitle()+"\"";
+			json += ",\"start\":\""+vo.getStartDate()+"\"";
+			json += ",\"end\":\""+vo.getEndDate()+"\"";
+			json += ",\"url\":\""+vo.getUrl()+"\"";
 			json += "}";
-			if(list.size() != cnt++) {
+			
+			if(list.size()!= cnt++) {
 				json += ",";
 			}
 		}
 		json += "]";
-		
-		out.print(json);
+		response.getWriter().append(json);
 	}
-
+	
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

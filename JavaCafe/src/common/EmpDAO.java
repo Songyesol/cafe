@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmpDAO {
 	private Connection conn;
@@ -32,6 +34,82 @@ public class EmpDAO {
 		}
 
 	} //end of 생성자
+	
+	public List<ScheduleVO> getScheduleList() {
+		String sql = "select * from schedules";
+		List<ScheduleVO> list = new ArrayList<>();
+		  
+		try {
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			ResultSet rs;
+			rs = psmt.executeQuery();
+			while(rs.next()) {
+				ScheduleVO vo=new ScheduleVO();
+				vo.setTitle(rs.getString("title"));
+				vo.setStartDate(rs.getString("start_date"));
+				vo.setEndDate(rs.getString("end_date"));
+				vo.setUrl(rs.getString("url"));
+				list.add(vo);
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}//달력 select
+	
+	public void insertSchedule(ScheduleVO vo) {
+		String sql = "insert into schedules values(?,?,?,?)"; 
+		try {
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setString(1, vo.getTitle());
+			psmt.setString(2, vo.getStartDate());
+			psmt.setString(3, vo.getEndDate());
+			psmt.setString(4, vo.getUrl());
+			int r = psmt.executeUpdate();
+			System.out.println(r + "건 입력완료");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}// 달력 insert 
+	
+	
+	public Map<String, Integer> getMemberByDept(){
+		String sql = "select department_name, count(*) from employees e, departments d "
+				+ "where e.department_id = d.department_id group by department_name";
+		Map<String, Integer> map = new HashMap<>();
+		
+		try {
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			ResultSet rs= psmt.executeQuery();
+			while(rs.next()) {
+				map.put(rs.getString(1), rs.getInt(2));
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return map;
+		
+	}
 	
 /////////////////// SELECT ////////////////////
 	
