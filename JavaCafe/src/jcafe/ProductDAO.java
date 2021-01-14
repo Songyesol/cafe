@@ -32,6 +32,41 @@ public class ProductDAO {
 
 		} //end of 생성자
 	
+	public ProductVO getProduct(ProductVO vo) {
+		String sql = "select * from product where item_no = ? ";
+		ProductVO v = null;
+		try {
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setString(1, vo.getItemNo());
+			
+			ResultSet rs = psmt.executeQuery();
+			if(rs.next()) {
+				v = new ProductVO();
+				v.setAlt(rs.getString("alt"));
+				v.setCategory(rs.getString("category"));
+				v.setContent(rs.getString("content"));
+				v.setImage(rs.getString("image"));
+				v.setItem(rs.getString("item"));
+				v.setItemNo(rs.getString("itemNo"));
+				v.setLikeIt(rs.getInt("likeIt"));
+				v.setLink(rs.getString("link"));
+				v.setPrice(rs.getInt("price"));
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return v;
+		
+	}
+	
 	public List<ProductVO> getProductList(){
 		String sql = "select * from product order by 1";
 		List<ProductVO> list = new ArrayList<>();
@@ -62,6 +97,33 @@ public class ProductDAO {
 		}
 		return list;
 	}//end of getProductList()
+	
+	public void insertProduct(ProductVO vo) {
+		String sql = "insert into product values (?,?,?,?,'item.jsp',?,?,?,?)";
+		try {
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setString(1, vo.getItemNo());
+			psmt.setString(2, vo.getItem());
+			psmt.setString(3, vo.getCategory());
+			psmt.setInt(4, vo.getPrice());
+			psmt.setString(5, vo.getContent());
+			psmt.setInt(6, vo.getLikeIt());
+			psmt.setString(7, vo.getItem());
+			psmt.setString(8, vo.getImage());
+			
+			int r = psmt.executeUpdate();
+			System.out.println(r+"건 입력완료");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	} //end of insertProduct();
 	
 }
 	

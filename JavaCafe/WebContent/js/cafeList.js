@@ -13,7 +13,7 @@ function showContents(result) {
 	for(val of data){
 		let elem_1,elem_2,elem_3;
 	//첫번째 자식요소
-	elem_1 = $('<a />').attr('href', val.link);
+	elem_1 = $('<a />').attr('href', 'item.jsp?itemNo='+val.item_no);
 	let e1_img = $('<img />')
 		.attr('src', '../images/'+ val.image)
 		.attr('alt', val.alt);
@@ -22,7 +22,7 @@ function showContents(result) {
 
 	//두번째 자식요소
 	elem_2 = $('<div />').addClass("card-body");
-	let e2_h4 = $('<h4 />').addClass("card-title").append($('<a />').attr('href', val.link).html(val.item));
+	let e2_h4 = $('<h4 />').addClass("card-title").append($('<a />').attr('href', 'item.jsp?itemNo='+val.item_no).html(val.item));
 	let krw_price = new Intl.NumberFormat("ko-KR",
 										  {style:"currency", currency:'KRW'}).format(val.price);
 	let e2_h5 = $('<h5 />').html(krw_price);
